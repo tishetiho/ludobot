@@ -16,9 +16,9 @@ from aiogram.exceptions import TelegramForbiddenError
 
 # --- КОНФИГУРАЦИЯ ---
 API_TOKEN = "8673476742:AAE4GeCi3x__yVgU3VKdtSYIvqfaTOaraJE"
-ADMIN_ID = 12345678  # Ваш ID
-OFFICIAL_CHAT_ID = -100123456789  # ID группы
-SPONSOR_CHANNEL_ID = -100987654321  # ID канала спонсора
+ADMIN_ID = 5078764886  # Ваш ID
+OFFICIAL_CHAT_ID = -1003446103260  # ID группы
+SPONSOR_CHANNEL_ID = -1003884251721 # ID канала спонсора
 
 # Настройки по умолчанию
 DEFAULT_LIMIT = 5
