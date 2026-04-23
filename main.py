@@ -7,6 +7,7 @@ from typing import Any, Awaitable, Callable, Dict
 import aiosqlite
 from aiogram import Bot, Dispatcher, F, Router, types
 from aiogram.filters import Command, BaseFilter
+from aiogram import BaseMiddleware
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -56,22 +57,25 @@ async def get_setting(key: str):
             row = await cursor.fetchone()
             return row[0] if row else None
 
-# --- MIDDLEWARES ---
-class RegistrationMiddleware(types.BaseObject):
+# --- MIDDLEWARE ---
+class RegistrationMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[types.TelegramObject, Dict[str, Any]], Awaitable[Any]],
         event: types.Update,
         data: Dict[str, Any]
     ) -> Any:
+        # В aiogram 3.x event — это Update, а пользователь лежит в data['event_from_user']
         user = data.get("event_from_user")
+        
         if user:
             async with aiosqlite.connect(DB_PATH) as db:
                 await db.execute(
                     "INSERT OR IGNORE INTO users (user_id, is_premium) VALUES (?, ?)",
-                    (user.id, user.is_premium)
+                    (user.id, bool(user.is_premium))
                 )
                 await db.commit()
+                
         return await handler(event, data)
 
 # --- FSM STATES ---
